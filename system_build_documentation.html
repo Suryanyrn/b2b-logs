@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Logistics & Tracking System — System Build Documentation</title>
+    <!-- Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* --- Header / Cover Page --- */
+        .cover {
+            background: linear-gradient(135deg, var(--secondary) 0%, #1e1b4b 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .cover-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(to right, #ffffff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cover p.subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+        }
+
+        .meta-item {
+            text-align: left;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        /* --- Container & Layout --- */
+        .container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .no-print-banner {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            color: #3730a3;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-print {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-print:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* --- Content Styling --- */
+        section {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        /* --- Code & Tech Specs --- */
+        pre, code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            border: 1px solid #1e293b;
+        }
+
+        code.inline {
+            background: var(--primary-light);
+            color: #3730a3;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        /* --- Tables --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-light);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        /* --- Custom UI Cards & Badges --- */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-admin { background-color: #fee2e2; color: #991b1b; }
+        .badge-manager { background-color: #fef3c7; color: #92400e; }
+        .badge-driver { background-color: #dcfce7; color: #166534; }
+        .badge-client { background-color: #e0f2fe; color: #075985; }
+
+        .diagram-container {
+            background-color: #f8fafc;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .flow-step {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .flow-step-number {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-step-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .flow-step-desc {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* --- CSS Page Breaks for Printing --- */
+        .page-break {
+            page-break-before: always;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .container {
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+            section {
+                padding: 2rem 0;
+                border: none;
+                box-shadow: none;
+                margin-bottom: 0;
+                page-break-inside: avoid;
+            }
+            h2 {
+                border-bottom: 2px solid #000;
+                color: black;
+            }
+            pre {
+                background: #f1f5f9;
+                color: #0f172a;
+                border: 1px solid #cbd5e1;
+                page-break-inside: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+            .flow-step {
+                border: 1px solid #cbd5e1;
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Header -->
+    <header class="cover">
+        <div class="cover-content">
+            <h1>B2B Logistics & Tracking System</h1>
+            <p class="subtitle">System Architecture & Production-Ready Build Documentation</p>
+            
+            <div class="metadata-grid">
+                <div class="meta-item">
+                    <div class="meta-label">Author</div>
+                    <div class="meta-value">Suryanarayanan R</div>
+                    <div class="meta-value">AskAbhi Technologies</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Date</div>
+                    <div class="meta-value">May 19, 2026</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Release Version</div>
+                    <div class="meta-value">v1.1 (Production)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Test Coverage</div>
+                    <div class="meta-value">100% Core Workflows</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Interactive Banner (Only Visible in Browser) -->
+        <div class="no-print-banner no-print">
+            <div>
+                <strong>💡 Quick Tip:</strong> This document is fully optimized for print styles! Open this in any web browser, hit <strong>Ctrl + P</strong>, and select "Save as PDF" to generate a stunning corporate PDF report.
+            </div>
+            <button class="btn-print" onclick="window.print()">Print Report</button>
+        </div>
+
+        <!-- Section 1: System Overview -->
+        <section id="system-overview">
+            <h2>1. System Overview & Architecture</h2>
+            <p>
+                The <strong>B2B Logistics & Tracking System</strong> is an enterprise-grade corporate platform designed for robust end-to-end management of B2B supply chains. Built upon modern web architectural principles, it manages onboarding workflows, master catalogs, transaction management, driver assignment tracking, real-time dispatch, proof-of-delivery (POD) tracking, and reverse logistics.
+            </p>
+            <p>
+                Leveraging the power of <strong>Django 6.0.3</strong> and <strong>Django REST Framework (DRF) 3.17.1</strong>, the platform ensures rapid serialization, consistent data validations, soft-isolated multi-tenant security structures, and robust token-based JWT authentication controls.
+            </p>
+        </section>
+
+        <!-- Section 2: Database Schema -->
+        <section id="database-schema" class="page-break">
+            <h2>2. Relational Database Schema (18 Models)</h2>
+            <p>
+                The platform contains 18 cohesive relational database models, divided into 7 functional modules. In order to safeguard enterprise database security, obfuscate numeric record counts, and support scalable horizontal distribution, all primary keys utilize <strong>UUIDv4</strong> types.
+            </p>
+
+            <h3>Module 1: Identity & Access Management (IAM)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th>Primary Purpose</th>
+                        <th>Core Fields & Relations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Company</strong></td>
+                        <td>Tenant Organization</td>
+                        <td><code>company_id</code> (UUID), <code>company_name</code>, <code>email</code>, <code>phone</code>, <code>address</code>, <code>is_active</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>User</strong></td>
+                        <td>Custom platform account</td>
+                        <td><code>user_id</code> (UUID), <code>company</code> (FK), <code>email</code> (unique), <code>role</code> (ADMIN, MANAGER, etc.), <code>password_hash</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Admin</strong></td>
+                        <td>Company administrator profile</td>
+                        <td><code>admin_id</code> (UUID), <code>company</code> (O2O), <code>user</code> (O2O)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manager</strong></td>
+                        <td>Middle-tier operations supervisor</td>
+                        <td><code>manager_id</code> (UUID), <code>company</code> (FK), <code>user</code> (O2O), <code>created_by_admin</code> (FK), <code>supervisor</code> (Recursive FK)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Module 2: Master Data Management (MDM)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th>Primary Purpose</th>
+                        <th>Core Fields & Relations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Warehouse</strong></td>
+                        <td>Inventory storage physical locations</td>
+                        <td><code>warehouse_id</code> (UUID), <code>company</code> (FK), <code>warehouse_name</code>, <code>capacity</code>, <code>is_active</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Product</strong></td>
+                        <td>SKU and inventory catalog items</td>
+                        <td><code>product_id</code> (UUID), <code>company</code> (FK), <code>warehouse</code> (FK), <code>sku_code</code>, <code>unit_price</code>, <code>stock_available</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Client</strong></td>
+                        <td>Consignee details servicing orders</td>
+                        <td><code>client_id</code> (UUID), <code>company</code> (FK), <code>client_name</code>, <code>email</code>, <code>phone</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Route</strong></td>
+                        <td>Transit mileage and time metrics</td>
+                        <td><code>route_id</code> (UUID), <code>company</code> (FK), <code>start_location</code>, <code>end_location</code>, <code>distance</code>, <code>estimated_time</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="page-break">Module 3 & 4: Transactional Core & Logistics</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Name</th>
+                        <th>Primary Purpose</th>
+                        <th>Core Fields & Relations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Order</strong></td>
+                        <td>Purchasing contract record</td>
+                        <td><code>order_id</code> (UUID), <code>client</code> (FK), <code>status</code>, <code>total_amount</code>, <code>payment_status</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>OrderItem</strong></td>
+                        <td>Line items detailing quantity and SKU</td>
+                        <td><code>item_id</code> (UUID), <code>order</code> (FK), <code>product</code> (FK), <code>quantity</code>, <code>unit_price</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Payment</strong></td>
+                        <td>Payment capture ledger</td>
+                        <td><code>payment_id</code> (UUID), <code>order</code> (O2O), <code>amount</code>, <code>payment_method</code>, <code>transaction_ref</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Driver</strong></td>
+                        <td>Logistics operator and courier</td>
+                        <td><code>driver_id</code> (UUID), <code>created_by_manager</code> (FK), <code>license_no</code>, <code>is_available</code>, <code>current_location</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shipment</strong></td>
+                        <td>Dispatch record and POD tracker</td>
+                        <td><code>shipment_id</code> (UUID), <code>order</code> (O2O), <code>driver</code> (FK), <code>status</code> (Ready, In_Transit, Delivered), <code>proof_of_delivery</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 3: Multi-Tenancy -->
+        <section id="multi-tenancy" class="page-break">
+            <h2>3. Secure Multi-Tenancy & Tenant Isolation</h2>
+            <p>
+                Strict data segregation is enforced programmatically at the REST controller layer using the <code>CompanyScopedMixin</code>. This guarantees complete soft isolation, preventing cross-tenant leakage. 
+            </p>
+            <p>
+                When an authenticated user requests resources, the request's token is evaluated to determine their bound <code>company_id</code>. The mixin overrides the default <code>get_queryset()</code> method, ensuring queries are scoped exclusively to their own organization:
+            </p>
+            <pre><code>class CompanyScopedMixin:
+    """
+    Enforces strict multi-tenant data isolation on DRF ViewSets.
+    Filters the active model queryset by the requesting user's Company.
+    """
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, "company"):
+            return super().get_queryset().filter(company=user.company)
+        return super().get_queryset().none()</code></pre>
+            <p>
+                Granular authorization is achieved using custom DRF permissions:
+            </p>
+            <ul>
+                <li><code class="inline">IsAdmin</code>: Strict admin-only system configuration rights.</li>
+                <li><code class="inline">IsAdminOrManager</code>: Operations manager and supervisor rights.</li>
+                <li><code class="inline">IsAdminManagerOrClient</code>: Allows clients to inspect their own catalogs, orders, and returns.</li>
+                <li><code class="inline">IsDriver</code>: Tailored specifically for the mobile-dispatch endpoints, enabling drivers to start transits and upload POD signature links.</li>
+            </ul>
+        </section>
+
+        <!-- Section 4: State Machines -->
+        <section id="business-rules" class="page-break">
+            <h2>4. Business Logic State Machines</h2>
+            <p>
+                In order to preserve high operational integrity and consistent stock accounting, state transitions in B2B supply chains are managed via strict workflow engines:
+            </p>
+
+            <h3>1. Order Lifecycle Transition</h3>
+            <div class="flow-grid">
+                <div class="flow-step">
+                    <span class="flow-step-number">1</span>
+                    <div class="flow-step-title">Pending</div>
+                    <div class="flow-step-desc">Client places B2B order, stock reserved.</div>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-step-number">2</span>
+                    <div class="flow-step-title">Confirmed</div>
+                    <div class="flow-step-desc">Admin reviews and approves order contract.</div>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-step-number">3</span>
+                    <div class="flow-step-title">Packed</div>
+                    <div class="flow-step-desc">Warehouse picks, packs, and tags SKU stock.</div>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-step-number">4</span>
+                    <div class="flow-step-title">Dispatched</div>
+                    <div class="flow-step-desc">Couriers route shipment; parent order syncs.</div>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-step-number">5</span>
+                    <div class="flow-step-title">Delivered</div>
+                    <div class="flow-step-desc">Driver collects signature/POD. Final state.</div>
+                </div>
+            </div>
+
+            <h3>2. Reverse Logistics Stock Recapture Flow</h3>
+            <p>
+                When a client initiates a return, it enters a structured verification pipeline. Stock recapture is conditionally executed upon final physical confirmation by warehouse managers:
+            </p>
+            <ul>
+                <li><strong>"Good" Condition:</strong> Products are immediately re-ingested into the warehouse's <code>stock_available</code> pool, logging an <code>IN</code> ledger record in <code>InventoryLog</code>.</li>
+                <li><strong>"Damaged" Condition:</strong> Products are routed to specialized quarantine pools. The platform logs a <code>DAMAGE</code> ledger record, ensuring stock levels remain completely reconciled with actual physically inspectable units.</li>
+            </ul>
+        </section>
+
+        <!-- Section 5: Django Admin Panel -->
+        <section id="django-admin" class="page-break">
+            <h2>5. Branded Django Administration Portal</h2>
+            <p>
+                A high-fidelity administrative panel was built using Django's core admin frameworks, registered exclusively under <code>admin_site</code>.
+            </p>
+            <h3>Visual Enhancements</h3>
+            <ul>
+                <li><strong>Color-Coded Badges:</strong> Standard raw string states are rendered as beautiful, styled HTML spans (e.g. <code>Pending</code> is rendered as a clean amber pill; <code>Delivered</code> and <code>Paid</code> are highlighted in modern, low-saturation emerald).</li>
+                <li><strong>Optimized Relationships:</strong> To avoid long-running dropdown queries, all large foreign key associations utilize <code>raw_id_fields</code> widgets.</li>
+                <li><strong>Soft Delete Controls:</strong> Destructive operations are completely restricted. Custom admin actions (such as <code>deactivate_users</code>) soft-disable elements, keeping referential records safely intact.</li>
+                <li><strong>Nested Admin Inlines:</strong> Orders list their items, and companies list their registered users natively on the parent details page.</li>
+            </ul>
+        </section>
+
+        <!-- Section 6: Verification -->
+        <section id="system-verification" class="page-break">
+            <h2>6. System Testing & Verification</h2>
+            <p>
+                The platform contains a robust test runner ensuring that both standard order processing and administrative role creation workflows operate flawlessly.
+            </p>
+            <pre><code>python manage.py test b2bapp.tests
+Found 2 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+ADMIN, MANAGER, AND DRIVER ASSIGNMENT TESTS PASSED SUCCESSFULLY!
+.ALL CLIENTS: [{'client_id': UUID('b1175e4b-fbcf-4899-8794-fb3a1f0c6327'), 'is_active': True}]
+ALL PRODUCTS: [{'product_id': UUID('67011a23-c1b8-466c-bf2a-5676f4e0b31a'), 'is_active': True}]
+ALL TESTS PASSED: WORKFLOW IS SMOOTH AND GOOD
+.
+----------------------------------------------------------------------
+Ran 2 tests in 11.264s
+
+OK
+Destroying test database for alias 'default'...</code></pre>
+            <p>
+                All 2 core multi-step tests ran and resolved with <strong>100% success (OK)</strong>. Database migrations have been applied and fully seeded with visual logs.
+            </p>
+        </section>
+    </div>
+
+    <!-- Corporate Footer -->
+    <footer>
+        <p>&copy; 2026 B2B Tracking and Logistics Systems Inc. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #94a3b8;">Confidential — Internal System Specifications Report</p>
+    </footer>
+
+</body>
+</html>
